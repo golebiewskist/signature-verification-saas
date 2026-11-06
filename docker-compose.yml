@@ -1,0 +1,19 @@
+services:
+  db:
+    image: postgres:17
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+  web:
+    build: ./backend
+    command: >
+      sh -c "python manage.py makemigrations
+            python manage.py migrate_schemas --shared &&
+            python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/app/backend
+    ports:
+      - "8000:8000"
